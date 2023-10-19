@@ -8,7 +8,7 @@ import java.util.*;
 public class CourseGraph {
     public int numCourses;
     private int[][] adjacencyList;
-    private Map<Integer, Course> Courses = new HashMap<>();
+    public static Map<Integer, Course> Courses = new HashMap<>();
     public static List<Course> CourseList = new ArrayList<>();
     public static int sumHour = 280;
     //拓扑子集
@@ -23,6 +23,12 @@ public class CourseGraph {
                 CourseList) {
             Courses.put(c.getId(), c);
         }
+
+
+        GenAdjacencyList();
+    }
+
+    public void  GenAdjacencyList(){
         numCourses = Courses.size() + 1;
         adjacencyList = new int[numCourses][numCourses];
         for (int i = 1; i <= Courses.size(); i++) {
@@ -32,6 +38,7 @@ public class CourseGraph {
                 adjacencyList[i][id] = 1;
             }
         }
+
     }
 
     public void addPrerequisite(int course, int prerequisite) {
@@ -72,7 +79,7 @@ public class CourseGraph {
 
     //拓扑子集
     public List<List<Course>> topologicalSubset(boolean[] mark, int num) {
-
+        GenAdjacencyList();
         System.out.println("课程编排中");
         //邻接矩阵
         int[][] subAdjacencyList = adjacencyList;

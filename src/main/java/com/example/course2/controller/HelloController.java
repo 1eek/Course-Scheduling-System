@@ -50,12 +50,20 @@ public class HelloController {
 
     @FXML
     void handleSchedule(ActionEvent event) {
-        int sumHour = Integer.parseInt(credits.getText());
-        System.out.println("正在编排课程，每学期课时为"+sumHour);
-        CourseGraph.sumHour=sumHour;
-        seData = service.getSemester();
-        updateSemesterInfo();
+        if("".equals(credits.getText())){
+            seData = service.getSemester();
+            updateSemesterInfo();
+
+        }else{
+            int sumHour = Integer.parseInt(credits.getText());
+            System.out.println("正在编排课程，每学期课时为"+sumHour);
+            CourseGraph.sumHour=sumHour;
+            seData = service.getSemester();
+            updateSemesterInfo();
+        }
+
     }
+
     @FXML
     void handleDel(ActionEvent event){
 
@@ -63,15 +71,32 @@ public class HelloController {
         for(Course c:selectedItems){
             System.out.println("删除了"+c.getName());
             CourseGraph.CourseList.remove(c);
+            CourseGraph.Courses.remove(c.getId());
+            System.out.println(CourseGraph.Courses.toString());
         }
         updateCourseInfo();
     }
-
+    public static Stage modalStage = new Stage();
+    //生成有向图
     @FXML
     void GenGraph(ActionEvent event) {
+        System.out.println("开始生成有向图");
+        try {
+            // 加载模态对话框的FXML文件
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/course2/Graph-view.fxml"));
+            Parent root = loader.load();
 
+            // 创建场景并设置根节点
+            Scene scene = new Scene(root);
+            modalStage.setScene(scene);
+
+            // 显示模态对话框
+            modalStage.showAndWait();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
-    public static Stage modalStage = new Stage();
+
 
 
     @FXML
@@ -96,19 +121,17 @@ public class HelloController {
 
     }
 
+
     @FXML
     void handleSearch(ActionEvent event) {
-
         Alert errorAlert = new Alert(Alert.AlertType.ERROR);
         errorAlert.setTitle("错误");
-
-
 
         String name = courseName.getText();
         System.out.println("开始搜索名称为"+name+"的课程");
         if(name==null||"".equals(name)) {
-            errorAlert.setHeaderText("未输入信息");
-            errorAlert.showAndWait();
+            courseInfo.setAll(CourseGraph.CourseList);
+            CourseInfo.refresh();
         }else {
             for (Course c : CourseGraph.CourseList) {
                 if(c.getName().equals(name)){

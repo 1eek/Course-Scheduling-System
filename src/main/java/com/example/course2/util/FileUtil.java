@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.List;
 
 public class FileUtil {
-    public static String filePath = "src/main/resources/course.json";
+    public static String filePath = "src/main/resources/test2.json";
     public static void save(List<Course> data){
 
         ObjectMapper objectMapper = new ObjectMapper();
